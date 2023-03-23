@@ -66,7 +66,7 @@ export function Chat() {
       { role: 'user', content: message } as ChatGPTMessage,
     ]
     setMessages(newMessages)
-    const last10messages = newMessages.slice(-10) // remember last 10 messages
+    // const last10messages = newMessages.slice(-10) // remember last 10 messages
 
     const response = await fetch('/api/chat', {
       method: 'POST',
@@ -74,12 +74,12 @@ export function Chat() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        messages: last10messages,
+        messages: newMessages,
         user: cookie[COOKIE_NAME],
       }),
     })
 
-    console.log('Edge function returned.')
+    // console.log('Edge function returned.')
 
     if (!response.ok) {
       throw new Error(response.statusText)
@@ -103,7 +103,7 @@ export function Chat() {
       const chunkValue = decoder.decode(value)
 
       lastMessage = lastMessage + chunkValue
-
+      // console.log(lastMessage)
       setMessages([
         ...newMessages,
         { role: 'assistant', content: lastMessage } as ChatGPTMessage,
@@ -119,7 +119,7 @@ export function Chat() {
         <ChatLine key={index} role={role} content={content} />
       ))}
 
-      {loading && <LoadingChatLine />}
+      {/* {loading && <LoadingChatLine />} */}
 
       {messages.length < 2 && (
         <span className="mx-auto flex flex-grow text-gray-600 clear-both">
